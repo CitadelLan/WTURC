@@ -101,5 +101,5 @@ def init():
         print("Failed to initialize the database.")
         return
 
-# generate_from_unit_csv()
-init()
+generate_from_unit_csv()
+# init)

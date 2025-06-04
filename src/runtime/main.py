@@ -85,15 +85,17 @@ def main():
                     while msg.find('(') != -1 and msg.find(')') != -1:
                         start_idx = msg.index('(')
                         end_idx = msg.index(')')
-                        unit_name = msg[start_idx + 1:end_idx]
+                        unit_name = msg[start_idx:end_idx+1]
+                        # print(unit_name)
                         # There can be () in the unit name, so we need to find the last ')'
-                        while unit_name.count('(') != unit_name.count(')'):
+                        while unit_name.count('(') > unit_name.count(')'):
                             end_idx += 1
-                            unit_name = msg[start_idx + 1:end_idx]
+                            unit_name = msg[start_idx:end_idx+1]
+                        unit_name = unit_name[1:-1]
                         print(unit_name)
                         # Search the hash name of the unit in the database
                         unit_hash = find_unit_hash_name(conn, lang_code, unit_name)
-                        print(unit_hash)
+                        # print(unit_hash)
                         if unit_hash is None:
                             print(f'Warning: Unit {unit_name} not found in database, skipping...')
                             print('This can be normal as some AI units have "()" in their names')
@@ -112,6 +114,7 @@ def main():
                 # Check the BR of all units in the match
                 br_ofs = max_br['realistic_br'] - player_br['realistic_br']
                 print('---------------------- GLOBAL BR STATUS ----------------------')
+                print(f'BR offset = {br_ofs}')
                 if br_ofs < 0.3:
                     unit_mgr.get_player_unit(player_unit_hash).full_downtier_cnt += 1
                     global_stats.full_downtier_cnt_rt += 1
@@ -147,35 +150,3 @@ def main():
         sleep(1)
 
 main()
-
-# def on_button_click(hwnd, msg, wparam, lparam):
-#     if msg == win32con.WM_COMMAND:
-#         if wparam == 1:  # 按钮ID为1
-#             print("按钮被点击，执行Python逻辑")
-#     return win32gui.DefWindowProc(hwnd, msg, wparam, lparam)
-#
-# wc = win32gui.WNDCLASS()
-# hinst = wc.hInstance = win32gui.GetModuleHandle(None)
-# wc.lpszClassName = "MyWin32Window"
-# wc.lpfnWndProc = on_button_click
-# classAtom = win32gui.RegisterClass(wc)
-#
-# hwnd = win32gui.CreateWindow(
-#     classAtom,
-#     "WinGUI窗口",
-#     win32con.WS_OVERLAPPEDWINDOW,
-#     100, 100, 300, 200,
-#     0, 0, hinst, None
-# )
-#
-# # 创建按钮
-# button_hwnd = win32gui.CreateWindow(
-#     "Button", "点我",
-#     win32con.WS_CHILD | win32con.WS_VISIBLE | win32con.BS_PUSHBUTTON,
-#     50, 50, 100, 30,
-#     hwnd, 1, hinst, None
-# )
-#
-# win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
-# win32gui.UpdateWindow(hwnd)
-# win32gui.PumpMessages()

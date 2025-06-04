@@ -1,5 +1,7 @@
 # Convertion on original unit.csv
 import csv
+import re
+
 import pandas as pd
 from pathlib import Path
 from styleframe import StyleFrame, Styler, utils
@@ -32,7 +34,7 @@ def convert_unit_csv(path):
                     new_line.append(row[i])
                     shop_localizations.append(row[i])
             else:
-                if len(shop_localizations) == 0:
+                if len(shop_localizations) == 0 or (not re.match(r'.*_[0-2]$', hash_name)):
                     for i in range(1, len(row)):
                         new_line.append(row[i])
                 else:
