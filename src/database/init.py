@@ -23,7 +23,7 @@ def establish_localization_db(conn):
         header = next(reader)
         for i in range(1, len(header) - 2):  # omit comment & max_chars
             available_localizations.append(header[i])
-            # Create table for each localization if it does not exist
+            # Create a table for each localization if it does not exist
             if not table_exists(conn, 'UNIT_' + header[i]):
                 print(f"Table {header[i]} does not exist, creating UNIT_{header[i]}.")
                 conn.execute("CREATE TABLE UNIT_{} ("
@@ -102,4 +102,4 @@ def init():
         return
 
 generate_from_unit_csv()
-# init)
+init()

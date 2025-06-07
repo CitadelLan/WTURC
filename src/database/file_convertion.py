@@ -22,24 +22,25 @@ def convert_unit_csv(path):
             new_line.append(header[i])
         convertion_data.append(new_line)
 
-        # Convert the unit name localizations into the same as the _shop one
-        shop_localizations = []
+        # Convert the unit name localizations into the same as the _0 one
+        full_localizations = []
+        unit_hash_name = ""
         for row in reader:
             new_line = []
             hash_name = row[0]
             new_line.append(hash_name)
-            if hash_name.endswith("_shop"):
-                shop_localizations = []
+            if hash_name.endswith("_0"):
+                full_localizations = []
+                unit_hash_name = hash_name[:-2]
                 for i in range(1, len(row)):
                     new_line.append(row[i])
-                    shop_localizations.append(row[i])
+                    full_localizations.append(row[i])
+            elif (hash_name.endswith("_1") or hash_name.endswith("_2")) and hash_name[:-2] == unit_hash_name:
+                for i in range(1, len(row)):
+                    new_line.append(full_localizations[i - 1])
             else:
-                if len(shop_localizations) == 0 or (not re.match(r'.*_[0-2]$', hash_name)):
-                    for i in range(1, len(row)):
-                        new_line.append(row[i])
-                else:
-                    for i in range(1, len(row)):
-                        new_line.append(shop_localizations[i-1])
+                for i in range(1, len(row)):
+                    new_line.append(row[i])
             convertion_data.append(new_line)
 
     with open(path, 'w', encoding='utf-8', newline='') as f:

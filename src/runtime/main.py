@@ -1,7 +1,5 @@
 import json
 from time import sleep
-import win32gui
-import win32con
 
 from src.database.sqlite import connect_to_db, find_unit_hash_name, find_unit_br, find_unit_localized_name
 from src.shared.file_paths import database_path, json_path
